@@ -1,7 +1,26 @@
 -- seconds.lua
 
+--//// TIME MEASUREMENTS
+--// y  | years
+--// mo | months
+--// w  | weeks
+--// d  | days
+--// h  | hours
+--// m  | minutes
+--// s  | seconds
+
+
 local Seconds = {}
 
+type timeObj = {
+	y: number,
+	mo: number,
+	w: number,
+	d: number,
+	h: number,
+	m: number,
+	s: number
+}
 
 local worth = {
 	{"y", 31557600},
@@ -14,6 +33,9 @@ local worth = {
 }
 
 
+--//// Seconds.StringToSeconds
+--// Converts time length string to pure seconds.
+--// Example string: 2d5m (2 days and 5 minutes)
 function Seconds.StringToSeconds(timeStr: string): number
 	local totalSeconds: number = 0
 
@@ -29,6 +51,9 @@ function Seconds.StringToSeconds(timeStr: string): number
 	return totalSeconds
 end
 
+--//// Seconds.SecondsToString
+--// Converts time length in seconds to a formatted string
+--// The formatted string matches the one returned by StringToSeconds
 function Seconds.SecondsToString(seconds: number): string
 	local timeString: string = ""
 
@@ -40,12 +65,39 @@ function Seconds.SecondsToString(seconds: number): string
 
 		if div >= 1 then
 			timeString = timeString .. tostring(math.floor(div)) .. sym
-
 			seconds -= math.floor(div) * val
 		end
 	end
 
 	return timeString
+end
+
+--//// Seconds.SecondsToTime
+--// Converts time length in seconds to an object containing various time measurements
+function Seconds.SecondsToTime(seconds: number): timeObj
+	local timeRes: timeObj = {
+		y  = 0,
+		mo = 0,
+		w  = 0,
+		d  = 0,
+		h  = 0,
+		m  = 0,
+		s  = 0
+	}
+
+	for _, time in pairs(worth) do
+		local sym = time[1]
+		local val = time[2]
+
+		local div = seconds / val
+
+		if div >= 1 then
+			timeRes[sym] = math.floor(div)
+			seconds -= math.floor(div) * val
+		end
+	end
+
+	return timeRes
 end
 
 return Seconds
