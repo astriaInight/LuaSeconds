@@ -16,36 +16,35 @@ local worth = {
 
 function Seconds.StringToSeconds(timeStr: string): number
 	local totalSeconds: number = 0
-	
+
 	for _, time in pairs(worth) do
 		local sym = time[1]
 		local val = time[2]
-		
+
 		for num in string.gmatch(timeStr, "(%d+)"..sym) do
 			totalSeconds += val * tonumber(num)
 		end
 	end
-	
+
 	return totalSeconds
 end
 
 function Seconds.SecondsToString(seconds: number): string
 	local timeString: string = ""
-	
+
 	for _, time in pairs(worth) do
 		local sym = time[1]
 		local val = time[2]
-		
+
 		local div = seconds / val
-		
+
 		if div >= 1 then
 			timeString = timeString .. tostring(math.floor(div)) .. sym
-			
+
 			seconds -= math.floor(div) * val
-			print(seconds)
 		end
 	end
-	
+
 	return timeString
 end
 
